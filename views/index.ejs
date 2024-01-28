@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Marker</title>
+    
+    <style>
+      html {
+        height: 100%;
+        margin:0;
+        padding:0;
+      }
+      .primary_content{
+        width:80%;
+      }
+      #map {
+      height: 500px;
+      width:75%
+    }
+    </style>
+  </head>
+  <body>
+    <form method="post">
+      <input type="text" id="city" name="city">
+      <input type="submit" id="submitbtn">
+      
+  </form>
+    <%=city%>, <%=data.sys.country%>
+    <br>
+    Your latitude: <info id="latitude"></info>
+    <br>
+    Your longitude: <info id="longitude"></info>
+    <br>
+    City latitude: <%= data.coord.lat%>
+    <br>
+    City longitude: <%= data.coord.lon%>
+    <br>
+    Temperature: <%= Math.round(temp-273.15) %>&deg;C <div id="icon"><img id="wicon" src=<%="https://openweathermap.org/img/w/"+data.weather[0].icon+".png" %> alt="Weather icon"></div>
+    <br>
+    Feels like: <%= Math.round(data.main.feels_like-273.15) %>&deg;C
+    <br>
+    Humidity: <%= data.main.humidity %>%
+    <br>
+    Pressure: <%= data.main.pressure %>hPa
+    <br>
+    Wind speed: <%= data.wind.speed %>m/s <%= data.wind.deg %>&deg;
+    <br>
+    <div>
+      <div id="map"></div>
+    </div>
+    <script>
+      function initMap() {
+        var location = {lat: <%=latitude%>, lng: <%=longitude%>};
+        var map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 4,
+          center: location
+        });
+      }
+    </script>
+    <script>
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(position => {
+          console.log(position.coords)
+          document.getElementById("longitude").innerText = position.coords.longitude;
+          document.getElementById("latitude").innerText = position.coords.latitude;
+        })
+      }
+      
+    </script>
+    <script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO10vh79Ea1oOX2ml_H85GmNwj_-kTxN0&callback=initMap"></script>
+  </body>
+</html>
